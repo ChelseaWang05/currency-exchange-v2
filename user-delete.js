@@ -1,32 +1,29 @@
-import express from 'express'; 
-import bodyParser from 'body-parser';
-import mysql from 'mysql';
+import express from 'express';
+import dotenv from 'dotenv';
+import pool from './db.js';
 
-//set up and configure express 
-const app = express(); 
-app.use(bodyParser.json());
+dotenv.config();
 
-//set up and intialize the database connection 
-const connection = mysql.createConnection({ 
-    host: "localhost", 
-    user: "root", 
-    password: "n3u3da!", 
-    database: "currency_db" 
-});
-
-//connect to the database
-connection.connect(error => {
-    if (error) {
-        console.error("Database connection failed:", error);
-        return;
-    }
-    console.log("Connect to MySQL database.")
-});
-
+const app = express();
+app.use(express.json());
 
 // get
-app.get("/currency_db", (req,res) => { 
-    connection.query("SELECT * FROM user", (error, results, fields) => { res.json(results); }); 
+app.get("/currency_db", async (req, res) => {
+    try {
+      const [results] = await pool.query("SELECT * FROM user");
+      res.json(results);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/currency_db/:userid', async (req, res) => {
+    try {
+      const [results] = await pool.query("SELECT * FROM user WHERE userid = ?", [req.params.userid]);
+      res.json(results[0] || {});
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
 });
 
 //get based on id
@@ -38,21 +35,30 @@ app.get('/currency_db/:userid', (req, res) => {
 });
 
 //delete 
-app.delete('/currency_db/:userid', (req, res) => {
-    connection.query(
-        `DELETE FROM compact_discs where userid = ${req.params.userid}`, 
-        (error, results, fields) => { res.end(JSON.stringify({ message: "ok" })); }
-    );
+app.delete('/currency_db/:userid', async (req, res) => {
+    try {
+      await pool.query("DELETE FROM user WHERE userid = ?", [req.params.userid]);
+      res.json({ message: "User deleted (if existed)" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
 });
 
 //post
-app.post("/currency_db", (req, res) => { 
-    let sql = "INSERT INTO compact_disc(name,email,password,register_name)"; 
-    sql += `VALUES ('${req.body.name}','${req.body.email}',${req.body.password},${req.body.register_name})` 
-    connection.query(sql, function(error, results, fields) { res.end(JSON.stringify({ message:"added new item"})); }); });
+app.post("/currency_db", async (req, res) => {
+    const { name, email, password, register_time } = req.body;
+    const sql = "INSERT INTO user (name, email, password, register_time) VALUES (?, ?, ?, ?)";
+      
+    try {
+        await pool.query(sql, [name, email, password, register_time]);
+        res.status(201).json({ message: "New user added" });
+    } catch (error) {
+          res.status(500).json({ error: error.message });
+        }
+});
 
 //update
-app.put("/currency_db/:userid", (req, res) => {
+app.put("/currency_db/:userid", async (req, res) => {
     const { name, email, password, register_time } = req.body;
     const userid = req.params.userid;
   
@@ -62,17 +68,17 @@ app.put("/currency_db/:userid", (req, res) => {
       WHERE userid = ?
     `;
   
-    connection.query(sql, [name, email, password, register_time, userid], (error, results) => {
-      if (error) {
-        console.error("Error updating user:", error);
-        return res.status(500).json({ message: "Database error", error });
-      }
-  
-      res.json({ message: "User updated successfully (if exists)" });
-    });
+    try {
+      const [result] = await pool.query(sql, [name, email, password, register_time, userid]);
+      res.json({ message: result.affectedRows > 0 ? "User updated" : "User not found" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   });
   
 
 //start the server 
-app.listen(3000, () => { console.log("Server is running."); });
-
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});

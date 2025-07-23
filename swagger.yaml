@@ -1,0 +1,209 @@
+openapi: 3.0.0
+info:
+  title: Currency Exchange API
+  version: 1.0.0
+  description: API for a currency exchange web application
+
+servers:
+  - url: http://localhost:3000/api
+
+paths:
+  /user/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+      responses:
+        '201':
+          description: User created
+        '400':
+          description: Invalid input
+
+  /user/login:
+    post:
+      summary: Login user and return JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: JWT token returned
+        '401':
+          description: Unauthorized
+
+  /user/{id}:
+    get:
+      summary: Get user info by ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+
+  /currencies:
+    get:
+      summary: Get list of available currencies
+      responses:
+        '200':
+          description: List of currencies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/currencies'
+
+  /exchange-rate:
+    get:
+      summary: Get exchange rate between two currencies
+      parameters:
+        - name: base
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: target
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Exchange rate
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeRate'
+
+  /watchlist:
+    get:
+      summary: Get user's watchlist
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Watchlist
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WatchlistItem'
+
+    post:
+      summary: Add currency pair to watchlist
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WatchlistItem'
+      responses:
+        '201':
+          description: Item added
+
+  /watchlist/{id}:
+    delete:
+      summary: Remove a currency pair from watchlist
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted successfully
+        '404':
+          description: Not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserRegister:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+          type: string
+        username:
+          type: string
+      required: [email, password, username]
+
+    UserLogin:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required: [email, password]
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        username:
+          type: string
+
+    Currency:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 12345
+        code:
+          type: string
+          example: United States Dollar
+
+    ExchangeRate:
+      type: object
+      properties:
+        base:
+          type: number
+        currency_id:
+          type: number
+        rate:
+          type: number
+          example: 1.0823
+        date:
+          type: string
+          format: date
+
+    Watchlist:
+      type: object
+      properties:
+        id:
+          type: string
+        currency_pair:
+          type: array
+          items:
+            type: number
+        target:
+          type: number

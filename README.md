@@ -6,7 +6,7 @@
 
 | GET | POST | PUT | DELETE | GET (Search) |
 | :-- | :-- | :-- | :--| :-- |
-| ? | ? | ? | ? | ? |
+| Chelsea | Emma | Eddie | ? | ? |
 
 ### User
 

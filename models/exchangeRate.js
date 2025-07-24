@@ -56,3 +56,5 @@ class ExchangeRate {
         return this;
     }
 }
+
+export default ExchangeRate

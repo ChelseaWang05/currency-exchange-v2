@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url'
 
 import currencyRouter from './routes/currency.js'
 import usersRouter from './routes/users.js'
+import exchangeRateRouter from './routes/exchange_rate.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/currencies', currencyRouter)
 app.use('/users', usersRouter)
+app.use('/exchange_rates', exchangeRateRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

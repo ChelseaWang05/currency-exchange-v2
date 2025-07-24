@@ -37,6 +37,7 @@ class Currency {
             'INSERT INTO currency (code, name, is_active) VALUES (?, ?, ?)',
             [this.code, this.name, this.is_active]
         );
+        console.log('Insert result:', result);
         this.id = result.insertId;
         return this;
     }

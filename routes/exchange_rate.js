@@ -6,4 +6,6 @@ const router = express.Router();
 /* API exchange rate list. */
 router.get('/', getAllExchangeRates);
 
+router.put('/rate')
+
 export default router;

@@ -43,7 +43,6 @@ class Currency {
     }
 
     async update() {
-        // console.log('check starts here', this.code,this.name,this.is_active,this.id);
         await db.query(
             'UPDATE currency SET code = IFNULL(?, code), name = IFNULL(?, name), is_active = IFNULL(?, is_active) WHERE id = ?',
             [this.code, this.name, this.is_active, this.id]

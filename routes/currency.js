@@ -11,7 +11,8 @@ router.post('/search', searchCurrencies);
 // routerc.getSearch('/getSearch', (req, res) => {
 //   res.send('respond with a resource');
 // });
-
+router.post('/', addCurrency);
+router.delete('/', deleteCurrencies);
 router.put('/:id', putCurrency);
 
 export default router;

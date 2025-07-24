@@ -1,5 +1,5 @@
 // Currency controller
-import Currency from "../models/currency";
+import Currency from "../models/currency.js";
 
 export function getAllCurrencies(req, res) {
   Currency.findAll()

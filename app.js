@@ -7,7 +7,7 @@ import bodyParser from 'body-parser'
 import logger from 'morgan'
 import { fileURLToPath } from 'url'
 
-import indexRouter from './routes/index.js'
+import currencyRouter from './routes/currency.js'
 import usersRouter from './routes/users.js'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -26,7 +26,7 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/', indexRouter)
+app.use('/currencies', currencyRouter)
 app.use('/users', usersRouter)
 
 // catch 404 and forward to error handler

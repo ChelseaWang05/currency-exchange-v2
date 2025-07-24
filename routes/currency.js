@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllCurrencies } from '../controllers/currencyController.js'; // Adjust the path as necessary
+import { getAllCurrencies, searchCurrencies } from '../controllers/currencyController.js'; // Adjust the path as necessary
 
 const routerc = express.Router();
 
@@ -7,7 +7,10 @@ const routerc = express.Router();
 // routerc.use(bodyParser.json());
 
 /* API currency list. */
-routerc.get('/currencies', getAllCurrencies);
-routerc.post('/currencies/search', searchCurrencies);
+routerc.get('/', getAllCurrencies);
+routerc.post('/search', searchCurrencies);
+// routerc.getSearch('/getSearch', (req, res) => {
+//   res.send('respond with a resource');
+// });
 
 export default routerc;

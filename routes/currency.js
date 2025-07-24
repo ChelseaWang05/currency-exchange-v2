@@ -1,15 +1,18 @@
 import express from 'express';
-import { getAllCurrencies, searchCurrencies, addCurrency, deleteCurrencies } from '../controllers/currencyController.js'; // Adjust the path as necessary
+import { getAllCurrencies, searchCurrencies, addCurrency, deleteCurrencies, putCurrency } from '../controllers/currencyController.js'; // Adjust the path as necessary
 
-const routerc = express.Router();
-
+const router = express.Router();
 
 // routerc.use(bodyParser.json());
 
 /* API currency list. */
-routerc.get('/', getAllCurrencies);
-routerc.post('/search', searchCurrencies);
-routerc.post('/', addCurrency);
-routerc.delete('/', deleteCurrencies); 
+router.get('/', getAllCurrencies);
+router.post('/search', searchCurrencies);
+// routerc.getSearch('/getSearch', (req, res) => {
+//   res.send('respond with a resource');
+// });
+router.post('/', addCurrency);
+router.delete('/', deleteCurrencies);
+router.put('/:id', putCurrency);
 
-export default routerc;
+export default router;

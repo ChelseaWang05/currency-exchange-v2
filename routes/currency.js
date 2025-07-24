@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllCurrencies, searchCurrencies, putCurrency } from '../controllers/currencyController.js'; // Adjust the path as necessary
+import { getAllCurrencies, searchCurrencies, addCurrency, deleteCurrencies, putCurrency } from '../controllers/currencyController.js'; // Adjust the path as necessary
 
 const router = express.Router();
 

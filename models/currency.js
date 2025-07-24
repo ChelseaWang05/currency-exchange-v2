@@ -37,6 +37,7 @@ class Currency {
             'INSERT INTO currency (code, name, is_active) VALUES (?, ?, ?)',
             [this.code, this.name, this.is_active]
         );
+        console.log('Insert result:', result);
         this.id = result.insertId;
         return this;
     }
@@ -55,10 +56,14 @@ class Currency {
         return this;
     }
 
-    static async search(code=null, name=null, is_active=null) {
+    static async search(id = null, code=null, name=null, is_active=null) {
         let query = 'SELECT * FROM currency WHERE 1=1';
         const params = [];
 
+        if (id) {
+            query += ' AND id = ?';
+            params.push(id);
+        }
         if (code) {
             query += ' AND code LIKE ?';
             params.push(`%${code}%`);

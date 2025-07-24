@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllCurrencies, searchCurrencies, addCurrency } from '../controllers/currencyController.js'; // Adjust the path as necessary
+import { getAllCurrencies, searchCurrencies, addCurrency, deleteCurrencies } from '../controllers/currencyController.js'; // Adjust the path as necessary
 
 const routerc = express.Router();
 
@@ -13,5 +13,6 @@ routerc.post('/search', searchCurrencies);
 //   res.send('respond with a resource');
 // });
 routerc.post('/', addCurrency);
+routerc.delete('/', deleteCurrencies); 
 
 export default routerc;

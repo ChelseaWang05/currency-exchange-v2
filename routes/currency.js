@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllCurrencies, searchCurrencies } from '../controllers/currencyController.js'; // Adjust the path as necessary
+import { getAllCurrencies, searchCurrencies, putCurrency } from '../controllers/currencyController.js'; // Adjust the path as necessary
 
 const router = express.Router();
 
@@ -12,7 +12,6 @@ router.post('/search', searchCurrencies);
 //   res.send('respond with a resource');
 // });
 
-/* PUT home page. */
-router.put('/:code/:date', putRate);
+router.put('/:id', putCurrency);
 
 export default router;

@@ -5,6 +5,7 @@ import path from 'path'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import logger from 'morgan'
+import cors from 'cors'
 import { fileURLToPath } from 'url'
 
 import currencyRouter from './routes/currency.js'
@@ -15,6 +16,14 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const app = express()
+
+// CORS configuration
+app.use(cors({
+  origin: 'http://localhost:' + process.env.FRONTEND_PORT,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))

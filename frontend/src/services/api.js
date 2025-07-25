@@ -63,8 +63,8 @@ class ApiService {
     return this.request('/exchange_rates');
   }
 
-  async getExchangeRate(from, to) {
-    return this.request(`/exchange_rates/${from}/${to}`);
+  async getExchangeRate(from, to, date = null) {
+    return this.request(`/exchange_rates/convert?from=${from}&to=${to}&date=${date}`);
   }
 }
 
